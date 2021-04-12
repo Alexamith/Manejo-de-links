@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+
+const mongoose = require("mongoose");
+const db = mongoose.connect("mongodb://127.0.0.1/CRM_API");
+
+
 const cors = require("cors");
-// const mongoose = require("mongoose");
-// const db = mongoose.connect("mongodb://127.0.0.1/bdnativotem");
 
 app.use(bodyParser.json());
 
