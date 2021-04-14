@@ -1,4 +1,4 @@
-
+let opn = require('opn');
 //Métodos para los links
 const Enlace = require("../Models/linkModel");
 function validarURL(url) {
@@ -68,11 +68,36 @@ function generarCodigo() {
 const linkGet = (req, res) => {
     Enlace.find(function (err, enlace) {
       if (err) {
-        res.status(422).json({ error: "Ha ocurrido un error mientras se generaba la consulta" });
+        res.status(422).json({ error: "Ha ocurrido un error mientras se generaba la consultaa" });
       }
       res.status(200).json({enlaces: enlace});
     });
 };
+const linkGetId = (req, res) => {
+  if (req.query && req.query.id) {
+    
+    Enlace.findById(req.query.id, function (err, enlace) {
+        if (err) {
+          console.log("Error mientras se hace la consulta", err);
+          res.status(422).json({ error: "El id no coincide con los registrados." });
+          return;
+        }
+      enlace.cantidadIngresos = enlace.cantidadIngresos + 1;
+      console.log( enlace.cantidadIngresos);
+      enlace.save(function (err,enlace) {  
+        if (err) {
+          res.status(422);
+          console.log("error while saving the link", err);
+        }
+        opn("https://facebook.com");
 
+        res.status(201).json({message: "Todo correcto"});
 
-module.exports = {linkPost,linkGet};
+      });
+    })
+  }else {
+    res.status(404).json({ error: "Provee un id" });
+  }
+};
+
+module.exports = {linkPost,linkGet, linkGetId};
