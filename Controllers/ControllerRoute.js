@@ -20,12 +20,13 @@ const linkPost = (req, res) => {
   let localhost = "localhost:3002/"
   
   if (link && protocol) {
-    if (validarURL(protocol)) {
+    if (validarURL(protocol+link)) {
       let codigo = generarCodigo();
       let enlace = new Enlace();
       enlace.codigo = codigo;
       enlace.enlaceCorto = protocol+localhost+codigo;
       enlace.enlaceLargo = protocol+link;
+      enlace.cantidadIngresos = 0;
 
       Enlace.find({ codigo: codigo },function (err, enlace) {
         if(err){
@@ -36,7 +37,7 @@ const linkPost = (req, res) => {
           enlace.codigo = generarCodigo();
         }
       });
-      enlace.save(function (err) {  
+      enlace.save(function (err,enlace) {  
         if (err) {
           res.status(422);
           console.log("error while saving the link", err);
@@ -44,11 +45,12 @@ const linkPost = (req, res) => {
         res.status(201).json(
           {
           message: link,
-          linkNuevo:"http://localhost:3002/"+enlace.codigo
+          linkNuevo:"http://localhost:3002/"+enlace.codigo,
+          Objeto:enlace
           });
       });
     }else {
-      res.status(501).json({error: "El link ingresado no funciona"});
+      res.status(422).json({error: "El link ingresado no funciona"});
 }
       
   } else {
@@ -63,4 +65,14 @@ function generarCodigo() {
   return codigo;
 }
 
-module.exports = {linkPost};
+const linkGet = (req, res) => {
+    Enlace.find(function (err, enlace) {
+      if (err) {
+        res.status(422).json({ error: "Ha ocurrido un error mientras se generaba la consulta" });
+      }
+      res.status(200).json({enlaces: enlace});
+    });
+};
+
+
+module.exports = {linkPost,linkGet};
