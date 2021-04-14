@@ -3,7 +3,7 @@ const router = Router();
 
 
 //Métodos para los links
-const {linkPost, linkGet,linkGetId} = require("../Controllers/ControllerRoute");
+const {linkPost, linkGet,linkGetId, linkDelete} = require("../Controllers/ControllerRoute");
 
 //ruta principall
 router.get("/", (req, res)=>{
@@ -17,6 +17,7 @@ router.get("/inicio", (req, res)=>{
 router.post("/user/dashboard/register", linkPost);
 router.get("/user/dashboard/links", linkGet);
 router.get("/user/dashboard/linksId", linkGetId);
+router.delete("/user/dashboard/deletelinksId", linkDelete);
 
 
 module.exports = router;

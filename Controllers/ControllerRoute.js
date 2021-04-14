@@ -89,7 +89,7 @@ const linkGetId = (req, res) => {
           res.status(422);
           console.log("error while saving the link", err);
         }
-        opn("https://facebook.com");
+        opn(enlace.enlaceLargo);
 
         res.status(201).json({message: "Todo correcto"});
 
@@ -99,5 +99,32 @@ const linkGetId = (req, res) => {
     res.status(404).json({ error: "Provee un id" });
   }
 };
-
-module.exports = {linkPost,linkGet, linkGetId};
+const linkDelete = (req, res) => {
+  if (req.query && req.query.id) {
+    Enlace.findById(req.query.id, function (err, enlace) {
+      if (err) {
+        res.status(500);
+        console.log("error while queryting the enlace", err);
+        res.json({ error: "El enlacee no existe" });
+      }
+      if (enlace) {
+        enlace.remove(function (err) {
+          if (err) {
+            res
+              .status(500)
+              .json({ error: "Ocurrió un error borrando el enlacee" });
+          }else{
+          res.status(200).json({ message: "All is ok" });
+        }
+        });
+      } else {
+        res.status(404);
+        console.log("error while queryting the enlace", err);
+        res.json({ error: "El enlacee no existe" });
+      }
+    });
+  } else {
+    res.status(404).json({ error: "You must provide a enlace ID" });
+  }
+};
+module.exports = {linkPost,linkGet, linkGetId,linkDelete};
