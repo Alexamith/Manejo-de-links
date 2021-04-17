@@ -40,7 +40,7 @@ const linkPost = (req, res) => {
       });
       enlace.save(function (err,enlace) {  
         if (err) {
-          res.status(422);
+          res.status(404).json( {error:"Ocurrió un error"} );
           console.log("error while saving the link", err);
         }
         res.status(201).json(
@@ -87,7 +87,7 @@ const linkGetId = (req, res) => {
       console.log( enlace.cantidadIngresos);
       enlace.save(function (err,enlace) {  
         if (err) {
-          res.status(422);
+          res.status(422).json({error: "Ha ocurrido un error guardando el objeto"});
           console.log("error while saving the link", err);
         }
         opn(enlace.enlaceLargo);
@@ -97,35 +97,34 @@ const linkGetId = (req, res) => {
       });
     })
   }else {
-    res.status(404).json({ error: "Provee un id" });
+    res.status(422).json({ error: "Provee un id" });
   }
 };
 const linkDelete = (req, res) => {
   if (req.query && req.query.id) {
     Enlace.findById(req.query.id, function (err, enlace) {
       if (err) {
-        res.status(500);
+        
         console.log("error while queryting the enlace", err);
-        res.json({ error: "El enlacee no existe" });
+        res.status(422).json({ error: "El enlacee no existe" });
       }
       if (enlace) {
         enlace.remove(function (err) {
           if (err) {
             res
-              .status(500)
+              .status(422)
               .json({ error: "Ocurrió un error borrando el enlacee" });
           }else{
           res.status(200).json({ message: "Se eliminó con éxito" });
         }
         });
       } else {
-        res.status(404);
         console.log("error while queryting the enlace", err);
-        res.json({ error: "El enlacee no existe" });
+        res.status(422).json({ error: "El enlacee no existe" });
       }
     });
   } else {
-    res.status(404).json({ error: "You must provide a enlace ID" });
+    res.status(422).json({ error: "You must provide a enlace ID" });
   }
 };
 module.exports = {linkPost,linkGet, linkGetId,linkDelete};
