@@ -6,7 +6,8 @@ function validarURL(url) {
   console.log(url);
   try {
     let miurl = new URL(url);
-    
+    console.log(miurl); 
+   
   } catch (error) {
     console.log(error);
     sirve = false;
@@ -44,7 +45,7 @@ const linkPost = (req, res) => {
         }
         res.status(201).json(
           {
-          message: link,
+          message: "Se registró con éxito",
           linkNuevo:"http://localhost:3002/"+enlace.codigo,
           Objeto:enlace
           });
@@ -114,7 +115,7 @@ const linkDelete = (req, res) => {
               .status(500)
               .json({ error: "Ocurrió un error borrando el enlacee" });
           }else{
-          res.status(200).json({ message: "All is ok" });
+          res.status(200).json({ message: "Se eliminó con éxito" });
         }
         });
       } else {
