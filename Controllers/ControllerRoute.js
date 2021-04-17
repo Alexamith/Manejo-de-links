@@ -24,7 +24,7 @@ const linkPost = (req, res) => {
       let codigo = generarCodigo();
       let enlace = new Enlace();
       enlace.codigo = codigo;
-      enlace.enlaceCorto = protocol+localhost+codigo;
+      enlace.enlaceCorto = "http://"+localhost+codigo;
       enlace.enlaceLargo = protocol+link;
       enlace.cantidadIngresos = 0;
 
@@ -71,7 +71,7 @@ const linkGet = (req, res) => {
         res.status(422).json({ error: "Ha ocurrido un error mientras se generaba la consultaa" });
       }
       res.status(200).json({enlaces: enlace});
-    });
+    }).sort({ cantidadIngresos: -1 }).limit(20);
 };
 const linkGetId = (req, res) => {
   if (req.query && req.query.id) {
